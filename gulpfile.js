@@ -29,13 +29,13 @@ gulp.task('default', ['vendor']);
 gulp.task('browserSync', function() {
   browserSync.init({
     server: {
-      baseDir: "./"
+      baseDir: "./build"
     }
   });
 });
 
 // Dev task
 gulp.task('dev', ['browserSync'], function() {
-  gulp.watch('./css/*.css', browserSync.reload);
-  gulp.watch('./*.html', browserSync.reload);
+  gulp.watch('./build/css/*.css', browserSync.reload);
+  gulp.watch('./build/*.html', browserSync.reload);
 });
