@@ -53,13 +53,13 @@ class Puzzle extends React.Component {
     this.state = {
       checks: "FTF",
     }
-    this.hints = null;
+    this.hints = [];
   }
 
   nextGame(){
     const checks = this.state.checks;
     const nextGameLength = checks.length + 1;
-    this.hints = null;
+    this.hints = [];
     this.setState({
       checks: generate(nextGameLength, nextGameLength*2)
     });
@@ -68,7 +68,7 @@ class Puzzle extends React.Component {
   clickHandler(i){
     if(this.hints){
       //if the clicked index matches hints, discard the matched move. Else, discard everything
-      this.hints = (this.hints[0] == i) ? this.hints.slice(1) : null;
+      this.hints = (this.hints[0] == i) ? this.hints.slice(1) : [];
     }
     this.setState({
       checks: toggle(this.state.checks, i)
@@ -78,7 +78,7 @@ class Puzzle extends React.Component {
   renderCheckboxs(){
     const checks = this.state.checks;
     const win = checks.indexOf("T") == -1;
-    const showHints = true;
+    const showHints = false;
     if(showHints && !this.hints) {
        this.hints = solve(checks);
     }
@@ -104,7 +104,7 @@ class Puzzle extends React.Component {
           {this.renderCheckboxs()}
         </div>
         <div>
-          <button className="btn btn-outline-dark">¯\_(ツ)_/¯</button>
+          {/*<button className="btn btn-outline-dark">¯\_(ツ)_/¯</button>*/}
           {win ? <button className="btn btn-outline-dark" onClick={() => this.nextGame()}>\(^.^)/</button> : null }
         </div>
       </div>
