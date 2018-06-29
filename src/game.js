@@ -12,7 +12,17 @@ function toggle(input, i){
 function flip(s){
   return s == "T" ? "F" : "T"
 }
-
+function generate(length, moves){
+  let puzzle = (new Array(length)).fill("T").join("")
+  for(let i = 0; i < moves; i++){
+    let j = getRandomInt(length)
+    puzzle = toggle(puzzle, j)
+  }
+  return puzzle;
+}
+function getRandomInt(max) {
+  return Math.floor(Math.random() * Math.floor(max));
+}
 class Puzzle extends React.Component {
   constructor(props) {
     super(props);
@@ -21,36 +31,47 @@ class Puzzle extends React.Component {
     }
   }
 
+  nextGame(){
+    const checks = this.state.checks;
+    const nextGameLength = checks.length + 1;
+    this.setState({
+      checks: generate(nextGameLength, nextGameLength*2)
+    });
+  }
+
   clickHandler(i){
     this.setState({
       checks: toggle(this.state.checks, i)
     });
   }
 
-  renderCheckbox(i){
-    const win = this.state.checks == "FFF";
-    return (
-      <input
-        type="checkbox"
-        className="zoom-3x"
-        disabled={win ? "disabled" : ""}
-        checked={this.state.checks[i] == "T"}
-        onChange={() => this.clickHandler(i)}
-      />);
+  renderCheckboxs(){
+    const checks = this.state.checks;
+    const win = checks.indexOf("T") == -1;
+    const checkboxes = checks.split("").map(((val, i) => {
+      return (
+        <input
+          key={i}
+          type="checkbox"
+          className="zoom-3x"
+          disabled={win ? "disabled" : ""}
+          checked={val == "T"}
+          onChange={() => this.clickHandler(i)}
+        />);
+    }));
+    return checkboxes;
   }
 
   render() {
-    const win = this.state.checks == "FFF";
+    const win = this.state.checks.indexOf("T") == -1;
     return (
       <div>
         <div>
-          {this.renderCheckbox(0)}
-          {this.renderCheckbox(1)}
-          {this.renderCheckbox(2)}
+          {this.renderCheckboxs()}
         </div>
         <div>
           <button className="btn btn-outline-dark">¯\_(ツ)_/¯</button>
-          {win ? <button className="btn btn-outline-dark">\(^.^)/</button> : null }
+          {win ? <button className="btn btn-outline-dark" onClick={() => this.nextGame()}>\(^.^)/</button> : null }
         </div>
       </div>
     );
