@@ -23,23 +23,53 @@ function generate(length, moves){
 function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));
 }
+
+function solve(input){
+  const visited = new Set()
+  const q = []
+  visited.add(input)
+  q.push([[], input]) //[list of moves, lastPos]
+  let maxLoop = 10000;
+  while(q.length > 0 && maxLoop-- > 0){
+    let tuple = q.shift()
+    let moves = tuple[0]
+    let node = tuple[1]
+    if(node.indexOf('T') == -1) return moves;
+    for(let i = 0; i < node.length; i++){
+      let next = toggle(node, i)
+      if(!visited.has(next)){
+        let newMoves = moves.slice()
+        newMoves.push(i)
+        q.push([newMoves, next])
+      }
+    }
+  }
+  return "shrug"
+}
+
 class Puzzle extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       checks: "FTF",
     }
+    this.hints = null;
   }
 
   nextGame(){
     const checks = this.state.checks;
     const nextGameLength = checks.length + 1;
+    this.hints = null;
     this.setState({
       checks: generate(nextGameLength, nextGameLength*2)
     });
   }
 
   clickHandler(i){
+    if(this.hints){
+      //if the clicked index matches hints, discard the matched move. Else, discard everything
+      this.hints = (this.hints[0] == i) ? this.hints.slice(1) : null;
+    }
     this.setState({
       checks: toggle(this.state.checks, i)
     });
@@ -48,12 +78,16 @@ class Puzzle extends React.Component {
   renderCheckboxs(){
     const checks = this.state.checks;
     const win = checks.indexOf("T") == -1;
+    const showHints = true;
+    if(showHints && !this.hints) {
+       this.hints = solve(checks);
+    }
     const checkboxes = checks.split("").map(((val, i) => {
       return (
         <input
           key={i}
           type="checkbox"
-          className="zoom-3x"
+          className={this.hints[0] == i ? "zoom-4x" : "zoom-3x"}
           disabled={win ? "disabled" : ""}
           checked={val == "T"}
           onChange={() => this.clickHandler(i)}
