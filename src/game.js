@@ -28,17 +28,19 @@ class Puzzle extends React.Component {
   }
 
   renderCheckbox(i){
+    const win = this.state.checks == "FFF";
     return (
       <input
         type="checkbox"
         className="zoom-3x"
+        disabled={win ? "disabled" : ""}
         checked={this.state.checks[i] == "T"}
         onChange={() => this.clickHandler(i)}
       />);
   }
 
   render() {
-    const success = this.state.checks == "FFF";
+    const win = this.state.checks == "FFF";
     return (
       <div>
         <div>
@@ -48,7 +50,7 @@ class Puzzle extends React.Component {
         </div>
         <div>
           <button className="btn btn-outline-dark">¯\_(ツ)_/¯</button>
-          <button className="btn btn-outline-dark">\(^.^)/</button>
+          {win ? <button className="btn btn-outline-dark">\(^.^)/</button> : null }
         </div>
       </div>
     );
