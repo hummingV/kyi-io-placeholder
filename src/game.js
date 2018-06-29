@@ -29,36 +29,29 @@ class Puzzle extends React.Component {
 
   renderCheckbox(i){
     return (
-          React.createElement("input", {
-            type: "checkbox",
-            className: "zoom-3x",
-            checked: this.state.checks[i] == "T",
-            onClick: (() => this.clickHandler(i)),
-          })
-      );
+      <input
+        type="checkbox"
+        className="zoom-3x"
+        checked={this.state.checks[i] == "T"}
+        onChange={() => this.clickHandler(i)}
+      />);
   }
 
   render() {
     const success = this.state.checks == "FFF";
-    return React.createElement(
-      "div",
-      null,
-      React.createElement(
-        "div",
-        null,
-        this.renderCheckbox(0),
-        this.renderCheckbox(1),
-        this.renderCheckbox(2),
-        React.createElement("button", { className: "btn btn-outline-dark"}, " \xAF\\_(\u30C4)_/\xAF "),
-      ),
-
-      !success ? null : React.createElement(
-        "div",
-        null,
-        React.createElement("button", { className: "btn btn-outline-dark"}, "(\u2310\u25A0_\u25A0) Yeah! "),
-      )
+    return (
+      <div>
+        <div>
+          {this.renderCheckbox(0)}
+          {this.renderCheckbox(1)}
+          {this.renderCheckbox(2)}
+        </div>
+        <div>
+          <button className="btn btn-outline-dark">¯\_(ツ)_/¯</button>
+          <button className="btn btn-outline-dark">\(^.^)/</button>
+        </div>
+      </div>
     );
-
   }
 }
 
