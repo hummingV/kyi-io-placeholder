@@ -1,12 +1,20 @@
 Just a placeholder static site based on [Bootstrap - Bare](https://startbootstrap.com/template-overviews/bare/)
 
-### Compile JSX
+### Run
 ~~~
-npx babel --watch src --out-dir build --presets react-app/prod
+npm run start
 ~~~
 
-### Run locally
+### build
 ~~~
-npm install
-gulp dev
+npm run build
 ~~~
+
+### publish to S3
+~~~
+./publish.sh
+~~~
+
+### TODOs
+* bootstrap is imported using ready-to-use css. To customie it, need to use source files
+  see: https://getbootstrap.com/docs/4.0/getting-started/webpack/#importing-precompiled-sass
